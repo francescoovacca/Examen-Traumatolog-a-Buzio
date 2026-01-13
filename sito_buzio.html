@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Examen Traumatología</title>
+    <style>
+        :root {
+            --color-primary: #2180A1;
+            --color-primary-hover: #1B6D87;
+            --color-success: #22C55E;
+            --color-error: #EF4444;
+            --color-warning: #F59E0B;
+            --color-bg: #F5F5F5;
+            --color-surface: #FFFFFF;
+            --color-text: #1F2937;
+            --color-text-secondary: #6B7280;
+            --color-border: #E5E7EB;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-hover) 100%);
+            color: white;
+            padding: 30px 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .main-menu {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .menu-btn {
+            background: var(--color-surface);
+            border: 2px solid var(--color-border);
+            padding: 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .menu-btn:hover {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        .quiz-container {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: var(--color-border);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--color-primary), var(--color-success));
+            transition: width 0.3s ease;
+        }
+
+        .question-number {
+            color: var(--color-text-secondary);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+        }
+
+        .question {
+            font-size: 1.2em;
+            font-weight: 600;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 20px;
+        }
+
+        .option {
+            background: var(--color-bg);
+            border: 2px solid var(--color-border);
+            padding: 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .option:hover {
+            background: var(--color-primary);
+            color: white;
+            border-color: var(--color-primary);
+        }
+
+        .option input {
+            margin-right: 12px;
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+
+        .option.correct {
+            background: rgba(34, 197, 94, 0.1);
+            border-color: var(--color-success);
+        }
+
+        .option.incorrect {
+            background: rgba(239, 68, 68, 0.1);
+            border-color: var(--color-error);
+        }
+
+        .option.correct-answer {
+            background: rgba(34, 197, 94, 0.2);
+            border-color: var(--color-success);
+            font-weight: 600;
+        }
+
+        .buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            padding: 12px 24px;
+            font-size: 1em;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--color-primary-hover);
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: var(--color-border);
+            color: var(--color-text);
+        }
+
+        .btn-secondary:hover {
+            background: #d1d5db;
+        }
+
+        .btn-back {
+            background: transparent;
+            color: var(--color-primary);
+            border: 2px solid var(--color-primary);
+            padding: 10px 20px;
+        }
+
+        .btn-back:hover {
+            background: var(--color-primary);
+            color: white;
+        }
+
+        .results {
+            background: var(--color-surface);
+            border-radius: 8px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .score-circle {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--color-primary), var(--color-success));
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5em;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+
+        .results h2 {
+            font-size: 1.8em;
+            margin-bottom: 15px;
+        }
+
+        .results p {
+            font-size: 1.1em;
+            color: var(--color-text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .detailed-results {
+            background: var(--color-bg);
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        .result-item {
+            margin-bottom: 20px;
+            padding: 15px;
+            background: white;
+            border-left: 4px solid var(--color-border);
+            border-radius: 4px;
+        }
+
+        .result-item.correct {
+            border-left-color: var(--color-success);
+        }
+
+        .result-item.incorrect {
+            border-left-color: var(--color-error);
+        }
+
+        .result-question {
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 1em;
+        }
+
+        .result-answer {
+            font-size: 0.95em;
+            color: var(--color-text-secondary);
+            margin: 8px 0;
+        }
+
+        .case-scenario {
+            background: #F0F9FF;
+            padding: 20px;
+            border-left: 4px solid var(--color-primary);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 1.05em;
+            line-height: 1.8;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: var(--color-bg);
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: var(--color-primary);
+        }
+
+        .stat-label {
+            color: var(--color-text-secondary);
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .quiz-container {
+                padding: 20px;
+            }
+
+            .question {
+                font-size: 1.1em;
+            }
+
+            button {
+                padding: 10px 16px;
+                font-size: 0.95em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📚 Examen Traumatología</h1>
+            <p>Prepárate para tu examen con 40 preguntas y 10 casos clínicos</p>
+        </header>
+
+        <div id="mainMenu" class="main-menu">
+            <button class="menu-btn" onclick="startQuiz()">📝 Quiz Preguntas (40)</button>
+            <button class="menu-btn" onclick="startCases()">🏥 Casos Clínicos (10)</button>
+            <button class="menu-btn" onclick="showGuide()">❓ Cómo Funciona</button>
+        </div>
+
+        <div id="guideSection" class="quiz-container hidden">
+            <button class="btn-back" onclick="backToMenu()">← Volver al Menú</button>
+            <h2 style="margin: 20px 0;">Cómo Funciona</h2>
+            <div style="line-height: 1.8; font-size: 1.05em;">
+                <h3>Quiz Preguntas:</h3>
+                <p>• Responde 40 preguntas de opción múltiple del material de traumatología</p>
+                <p>• Una sola respuesta correcta por pregunta</p>
+                <p>• Al final verás resultados y respuestas correctas</p>
+                <p>• Descubre dónde necesitas mejorar</p>
+                
+                <h3 style="margin-top: 20px;">Casos Clínicos:</h3>
+                <p>• Lee un escenario clínico realista</p>
+                <p>• Responde 4 preguntas sobre el caso</p>
+                <p>• 10 escenarios diferentes para desarrollar razonamiento clínico</p>
+                <p>• Casos incluyen fracturas, complicaciones, tratamientos y diagnósticos</p>
+            </div>
+        </div>
+
+        <div id="quizSection" class="quiz-container hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <button class="btn-back" onclick="backToMenu()">← Volver al Menú</button>
+                <span style="font-weight: 600;" id="modeDisplay"></span>
+            </div>
+
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+            </div>
+
+            <div class="question-number" id="questionNumber"></div>
+            <div class="question" id="questionText"></div>
+            <div class="options" id="optionsContainer"></div>
+            <div class="buttons">
+                <button class="btn-primary" id="nextBtn" onclick="nextQuestion()" disabled>Siguiente →</button>
+                <button class="btn-secondary" id="skipBtn" onclick="skipQuestion()">Saltar esta pregunta</button>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="results hidden">
+            <div class="score-circle" id="scoreDisplay"></div>
+            <h2 id="resultTitle"></h2>
+            <p id="resultMessage"></p>
+            
+            <div class="stats">
+                <div class="stat-box">
+                    <div class="stat-value" id="correctCount"></div>
+                    <div class="stat-label">Correctas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="incorrectCount"></div>
+                    <div class="stat-label">Incorrectas</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value" id="skippedCount"></div>
+                    <div class="stat-label">Saltadas</div>
+                </div>
+            </div>
+
+            <div class="detailed-results" id="detailedResults"></div>
+
+            <div class="buttons" style="justify-content: center; margin-top: 30px;">
+                <button class="btn-primary" onclick="backToMenu()">← Volver al Menú</button>
+                <button class="btn-secondary" onclick="location.reload()">Reiniciar examen</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const quizQuestions = [
+            {
+                id: 1,
+                question: "¿Cuál es la definición de fractura según traumatología?",
+                options: ["Lesión articular", "Solución de continuidad de un hueso con origen traumático", "Rotura de un ligamento", "Inflamación del hueso"],
+                correct: 1
+            },
+            {
+                id: 2,
+                question: "¿Cuáles son los signos clínicos clásicos de una fractura?",
+                options: ["Solo dolor", "Dolor, impotencia funcional, deformidad y tumefacción", "Solo deformidad", "Inflamación sin dolor"],
+                correct: 1
+            },
+            {
+                id: 3,
+                question: "¿Qué es la crepitación?",
+                options: ["Signo directo de fractura", "Signo indirecto de fractura", "Un síntoma raro", "No relacionado con fracturas"],
+                correct: 1
+            },
+            {
+                id: 4,
+                question: "¿Cómo se clasifican las fracturas por tipo de traumatismo?",
+                options: ["Solo por localización", "Baja energía, alta energía y estrés/sobrecarga", "Solo por edad", "Por color de la piel"],
+                correct: 1
+            },
+            {
+                id: 5,
+                question: "¿Cuál es el principio base en el tratamiento de fracturas?",
+                options: ["Inmovilización sin reducción", "Reducción e inmovilización", "Solo terapia farmacológica", "Nada es necesario"],
+                correct: 1
+            },
+            {
+                id: 6,
+                question: "¿Las fracturas epifisarias/articulares tienen?",
+                options: ["El mejor pronóstico", "El peor pronóstico entre todas", "Pronóstico intermedio", "Ninguna consecuencia"],
+                correct: 1
+            },
+            {
+                id: 7,
+                question: "¿Qué es la pseudoartrosis?",
+                options: ["Una fractura bien consolidada", "Fracaso de consolidación ósea", "Una fractura leve", "Un tipo de luxación"],
+                correct: 1
+            },
+            {
+                id: 8,
+                question: "La pseudoartrosis hipertrófica se manifiesta por:",
+                options: ["Defecto de vascularización", "Defecto de estabilidad sin déficit vascular", "Siempre infectada", "Sin callo de fractura"],
+                correct: 1
+            },
+            {
+                id: 9,
+                question: "¿Cuáles son las fases de consolidación ósea?",
+                options: ["Una sola fase", "Inflamatoria, reparativa y remodelación", "Solo formación de hueso", "Sin proceso definido"],
+                correct: 1
+            },
+            {
+                id: 10,
+                question: "La Ley de Wolff describe:",
+                options: ["Curación de infecciones", "Cómo el hueso cambia arquitectura según cargas", "Clasificación de fracturas", "Nutrición del hueso"],
+                correct: 1
+            },
+            {
+                id: 11,
+                question: "Las fracturas abiertas Gustilo IIIC presentan:",
+                options: ["Herida < 1 cm", "Herida > 10 cm con lesión neurovascular", "Solo lesión muscular", "Herida con infección menor"],
+                correct: 1
+            },
+            {
+                id: 12,
+                question: "Primer paso en manejo de fractura abierta:",
+                options: ["Hacer radiografía", "Gestionar ABCDE del paciente", "Dar antibióticos", "Suturar inmediatamente"],
+                correct: 1
+            },
+            {
+                id: 13,
+                question: "Profilaxis antibiótica en fracturas abiertas:",
+                options: ["Dosis normales", "Dosis máximas, amplio espectro", "Solo penicilina", "Opcional"],
+                correct: 1
+            },
+            {
+                id: 14,
+                question: "¿Qué complicación causa 'contractura isquémica de Volkmann'?",
+                options: ["Embolia grasa", "Síndrome compartimental agudo", "Infección", "Pseudoartrosis"],
+                correct: 1
+            },
+            {
+                id: 15,
+                question: "Las '5P' del síndrome compartimental incluyen:",
+                options: ["Dolor, Presión, Pulsación, Parálisis, Palidez", "Dolor, Parestesias, Dolor al estiramiento", "Solo dolor y palidez", "No existe tal regla"],
+                correct: 0
+            },
+            {
+                id: 16,
+                question: "Presión compartimental > 30-40 mmHg requiere:",
+                options: ["Solo observación", "Apertura quirúrgica (fasciotomía)", "Masaje", "Terapia farmacológica"],
+                correct: 1
+            },
+            {
+                id: 17,
+                question: "Algodistrofia o síndrome de Sudeck:",
+                options: ["Dolor proporcional", "Dolor desproporcionado con cambios vegetativos", "Solo inflamación", "Sin dolor"],
+                correct: 1
+            },
+            {
+                id: 18,
+                question: "Fracturas en niños tienen características por:",
+                options: ["Osteoporosis", "Hueso más elástico, periostio grueso, fisis", "Hueso más frágil", "Nada especial"],
+                correct: 1
+            },
+            {
+                id: 19,
+                question: "Fractura en 'tallo verde' en niños:",
+                options: ["Fractura completa", "Fractura incompleta con periostio intacto", "Fractura de fémur", "No existe"],
+                correct: 1
+            },
+            {
+                id: 20,
+                question: "Clasificación Salter-Harris tipo I tiene:",
+                options: ["Mal pronóstico", "Buen pronóstico", "Pronóstico intermedio", "Pronóstico muy malo"],
+                correct: 1
+            },
+            {
+                id: 21,
+                question: "Fracturas articulares requieren:",
+                options: ["Inmovilización genérica", "Reducción anatómica mediante osteosíntesis interna", "Ningún tratamiento especial", "Solo reposo"],
+                correct: 1
+            },
+            {
+                id: 22,
+                question: "Las luxaciones se caracterizan por:",
+                options: ["Fractura ósea", "Pérdida de contacto articular", "Solo inflamación", "Nada específico"],
+                correct: 1
+            },
+            {
+                id: 23,
+                question: "Luxación glenohumeral también llamada:",
+                options: ["Hombro en 'tecla'", "Hombro en 'charretera'", "Hombro normal", "Sin nombre especial"],
+                correct: 1
+            },
+            {
+                id: 24,
+                question: "Todas las luxaciones necesitan:",
+                options: ["Solo observación", "Reducción urgente bajo anestesia e inmovilización", "Solo terapia médica", "Amputación"],
+                correct: 1
+            },
+            {
+                id: 25,
+                question: "Los esguinces son lesiones de:",
+                options: ["Hueso", "Ligamentos y cápsula articular", "Músculos", "Nervios"],
+                correct: 1
+            },
+            {
+                id: 26,
+                question: "Esguince grado III presenta:",
+                options: ["Solo dolor", "Dolor, tumefacción importante, hemartros, rotura total", "Solo deformidad", "Nada significativo"],
+                correct: 1
+            },
+            {
+                id: 27,
+                question: "Tratamiento de esguince grado I:",
+                options: ["Cirugía inmediata", "Reposo relativo, hielo, vendaje, fisioterapia", "Inmovilización rígida", "Ningún tratamiento"],
+                correct: 1
+            },
+            {
+                id: 28,
+                question: "Clasificación Seddon de lesiones nerviosas:",
+                options: ["Dos tipos", "Neuroapraxia, axonotmesis, neurotmesis", "Cuatro tipos", "Sin clasificación estándar"],
+                correct: 1
+            },
+            {
+                id: 29,
+                question: "Neuroapraxia tiene:",
+                options: ["Mal pronóstico", "Buen pronóstico, recuperación siempre", "Pronóstico variable", "Sin recuperación"],
+                correct: 1
+            },
+            {
+                id: 30,
+                question: "Neurotmesis es:",
+                options: ["Interrupción reversible", "Interrupción completa, no se recupera sin cirugía", "Compresión menor", "Lesión superficial"],
+                correct: 1
+            },
+            {
+                id: 31,
+                question: "Síndrome compartimental crónico presenta:",
+                options: ["Emergencia médica", "Dolor después de esfuerzos que mejora con reposo", "Dolor constante", "Sin síntomas"],
+                correct: 1
+            },
+            {
+                id: 32,
+                question: "Embolia grasa aparece en:",
+                options: ["Todas las fracturas", "Fracturas de huesos grandes, 48-72 horas", "Nunca", "Solo fracturas abiertas"],
+                correct: 1
+            },
+            {
+                id: 33,
+                question: "TVP se manifiesta con:",
+                options: ["Dolor torácico", "Tumefacción y edema en MMII", "Parálisis", "Anestesia"],
+                correct: 1
+            },
+            {
+                id: 34,
+                question: "Fracturas patológicas son:",
+                options: ["Fracturas en hueso normal", "Fracturas en hueso comprometido (tumoral)", "Fracturas por estrés", "Fracturas leves"],
+                correct: 1
+            },
+            {
+                id: 35,
+                question: "Escala de Mirel > 7-8 puntos en fracturas patológicas indica:",
+                options: ["Tratamiento conservador", "Necesidad de cirugía profiláctica", "Sin intervención", "Solo observación"],
+                correct: 1
+            },
+            {
+                id: 36,
+                question: "Radiografías simples son útiles para ver:",
+                options: ["Ligamentos y músculos", "Hueso y lesiones óseas", "Solo partes blandas", "Nada en traumatología"],
+                correct: 1
+            },
+            {
+                id: 37,
+                question: "RMN es elección para:",
+                options: ["Diagnóstico óseo inicial", "Lesiones partes blandas: ligamentos, meniscos", "Todas las fracturas", "Nada"],
+                correct: 1
+            },
+            {
+                id: 38,
+                question: "TAC es útil en:",
+                options: ["Lesiones partes blandas", "Fracturas articulares y estabilidad vertebral", "Ninguna lesión", "Solo infecciones"],
+                correct: 1
+            },
+            {
+                id: 39,
+                question: "Reducción de fractura significa:",
+                options: ["Dar medicamentos", "Restaurar estructura anatómica normal", "Inmovilizar paciente", "Hacer radiografía"],
+                correct: 1
+            },
+            {
+                id: 40,
+                question: "Osteosíntesis es:",
+                options: ["Terapia farmacológica", "Fijación ósea con dispositivos", "Tipo de infección", "Enfermedad congénita"],
+                correct: 1
+            }
+        ];
+
+        const clinicalCases = [
+            {
+                id: 1,
+                scenario: "Hombre de 72 años con osteoporosis cae del lecho. Dolor intenso en ingle y cadera, no puede levantarse. Extremidad inferior acortada en rotación externa. Radiografía: fractura subcapital cuello femoral.",
+                questions: [
+                    {text: "¿Mecanismo probable?", options: ["Alta energía", "Baja energía con fragilidad", "Fractura patológica", "Fractura de estrés"], correct: 1},
+                    {text: "¿Riesgo vascular principal?", options: ["Hemorragia", "Lesión femoral", "Necrosis avascular", "Trombosis venosa"], correct: 2},
+                    {text: "¿Diagnóstico confirmatorio?", options: ["TAC", "Ecografía", "Radiografía", "RMN"], correct: 2},
+                    {text: "¿Tratamiento elegido?", options: ["Yeso", "Tracción", "Osteosíntesis/artroplastia", "Fisioterapia"], correct: 2}
+                ]
+            },
+            {
+                id: 2,
+                scenario: "Niña 16 años, esguince tobillo en partido fútbol. Tumefacción lateral importante, equimosis, dificultad caminar pero no impotencia total. Examen neurovascular normal.",
+                questions: [
+                    {text: "¿Grado de esguince?", options: ["Grado I", "Grado II", "Grado III", "Sin esguince"], correct: 1},
+                    {text: "¿Estructura dañada?", options: ["Cápsula", "Ligamentos laterales", "Tibia", "Nervio"], correct: 1},
+                    {text: "¿Primer tratamiento?", options: ["Yeso 6 semanas", "Reposo, hielo, vendaje, fisioterapia", "Cirugía", "Solo analgésicos"], correct: 1},
+                    {text: "¿Tiempo inmovilización?", options: ["1 día", "1 semana", "3 semanas", "3 meses"], correct: 2}
+                ]
+            },
+            {
+                id: 3,
+                scenario: "Hombre 45 años, accidente vehicular alta energía. Fractura expuesta tercio medio fémur, herida 30 cm contaminada, periostio dañado, signos de shock. Edema masivo en pierna.",
+                questions: [
+                    {text: "¿Grado Gustilo?", options: ["I", "II", "IIIB", "IIIC"], correct: 2},
+                    {text: "¿Primer paso?", options: ["Suturar herida", "ABCDE y estabilización", "Radiografía", "Analgesia"], correct: 1},
+                    {text: "¿Procedimiento indicado?", options: ["Yeso", "Fijador externo", "Vendaje", "Tracción"], correct: 1},
+                    {text: "¿Profilaxis antibiótica?", options: ["Cefalosporina sola", "Cefalosporina + aminoglucósidos + penicilina", "No necesaria", "Solo tetraciclina"], correct: 1}
+                ]
+            },
+            {
+                id: 4,
+                scenario: "Niño 10 años, cae bicicleta apoyando mano extendida. Dolor tumefacción muñeca, impotencia funcional. Radiografía: fractura radio distal con angulación dorsal, 'dorso de tenedor'.",
+                questions: [
+                    {text: "¿Nombre fractura?", options: ["Monteggia", "Colles", "Galeazzi", "Smith"], correct: 1},
+                    {text: "¿Mecanismo lesión?", options: ["Rotación", "Caída mano extendida", "Compresión axial", "Estiramiento"], correct: 1},
+                    {text: "¿Complicación frecuente?", options: ["Infección", "Algodistrofia", "Siempre bien", "Nada"], correct: 1},
+                    {text: "¿Tratamiento inicial?", options: ["Cirugía", "Reducción e inmovilización", "Fisioterapia", "Extirpación"], correct: 1}
+                ]
+            },
+            {
+                id: 5,
+                scenario: "Hombre 55 años, después reducción fractura fémur con yeso apretado. A las 6 horas: dolor intenso, parestesias, músculo pálido. Síntomas no alivian aunque levanten yeso.",
+                questions: [
+                    {text: "¿Complicación?", options: ["Infección", "Síndrome compartimental", "Embolia grasa", "Pseudoartrosis"], correct: 1},
+                    {text: "¿Presión compartimental crítica?", options: ["< 10", "> 30-40", "< 5", "Sin límite"], correct: 1},
+                    {text: "¿Tratamiento urgencia?", options: ["Antibióticos", "Fasciotomía", "Masaje", "Manual"], correct: 1},
+                    {text: "¿Secuela grave?", options: ["Dolor crónico", "Contractura Volkmann", "Solo artrosis", "Nada"], correct: 1}
+                ]
+            },
+            {
+                id: 6,
+                scenario: "Mujer 35 años, cáncer mama metastásico. Fractura patológica cuello fémur, baja energía (caída cama). Radiografía: lesión con bordes mal delimitados.",
+                questions: [
+                    {text: "¿Tipo fractura?", options: ["Estrés", "Patológica", "Fragilidad", "Traumática normal"], correct: 1},
+                    {text: "¿Objetivo tratamiento?", options: ["Curación completa", "Calidad de vida y función", "Prevención", "Amputación"], correct: 1},
+                    {text: "¿Tratamiento apropiado?", options: ["Conservador", "Osteosíntesis simple", "Nada", "Quimioterapia"], correct: 1},
+                    {text: "¿Escala Mirel para?", options: ["Gravedad metástasis", "Cirugía profiláctica", "Función motora", "Supervivencia"], correct: 1}
+                ]
+            },
+            {
+                id: 7,
+                scenario: "Joven 20 años, distorsión importante rodilla en fútbol. Dolor agudo, deformidad, hemartros, dificultad movilidad. TAC: luxación tibiofemoral.",
+                questions: [
+                    {text: "¿Complicación grave?", options: ["Menisco", "Neurovascular", "Ligamento", "Nada"], correct: 1},
+                    {text: "¿Nervio en riesgo?", options: ["Radial", "Ciático poplíteo externo", "Mediano", "Safeno"], correct: 1},
+                    {text: "¿Arteria lesionada?", options: ["Observar", "Reparación vascular", "Anticoagulantes", "Amputación"], correct: 1},
+                    {text: "¿Primer paso?", options: ["Imaging", "Reducción urgencia", "Cirugía planificada", "Medicinas"], correct: 1}
+                ]
+            },
+            {
+                id: 8,
+                scenario: "Niña 8 años, cae jugando. Fractura codo. Tumefacción masiva, dolor, imposibilidad movimiento. Radiografía: fractura condiloide húmero desplazada.",
+                questions: [
+                    {text: "¿Riesgo principal?", options: ["Dolor", "Neurovascular y compartimental", "Infección", "Nada"], correct: 1},
+                    {text: "¿A preservar?", options: ["Olécranon", "Fisis y cartílago crecimiento", "Cortical", "Periostio"], correct: 1},
+                    {text: "¿Tratamiento?", options: ["Yeso", "Reducción precisa e osteosíntesis", "Tracción", "Extirpación"], correct: 1},
+                    {text: "¿Complicación tardía?", options: ["Infección", "Alteración crecimiento", "Pseudoartrosis", "Nada"], correct: 1}
+                ]
+            },
+            {
+                id: 9,
+                scenario: "Paciente 65 años, fractura vertebral cervical C5 por colisión posterior. Tetraplegia (4 extremidades), alteración sensibilidad. RMN: compresión médula espinal.",
+                questions: [
+                    {text: "¿Primer paso?", options: ["Inmovilización cuello y ABCDE", "Cirugía urgencia", "Esteroides", "Rehabilitación"], correct: 0},
+                    {text: "¿Causa tetraplegia?", options: ["Ansiedad", "Compresión médula", "Radícula", "Nada"], correct: 1},
+                    {text: "¿Tratamiento?", options: ["Collarín", "Tracción y osteosíntesis", "Nada", "Amputación"], correct: 1},
+                    {text: "¿Pronóstico neurológico?", options: ["Siempre bien", "Depende lesión y descompresión", "Siempre mal", "Independiente"], correct: 1}
+                ]
+            },
+            {
+                id: 10,
+                scenario: "Varón 30 años, luxación hombro derecho al levantar peso. Dolor severo, deformidad típica, imposibilidad movimiento. Ausencia pulsaciones distales pero mano caliente.",
+                questions: [
+                    {text: "¿Tipo luxación frecuente?", options: ["Anterior", "Posterior", "Inferior", "Superior"], correct: 0},
+                    {text: "¿Nervio a evaluar?", options: ["Mediano", "Radial", "Axilar", "Cubital"], correct: 2},
+                    {text: "¿Primer tratamiento?", options: ["Radiografía", "Reducción urgencia", "Cirugía", "Medicinas"], correct: 1},
+                    {text: "¿Complicación a monitorear?", options: ["Infección", "Lesión vascular isquemia", "Artritis", "Rigidez"], correct: 1}
+                ]
+            }
+        ];
+
+        let currentQuestion = 0;
+        let currentCase = 0;
+        let mode = null;
+        let answers = [];
+        let caseAnswers = [];
+
+        function startQuiz() {
+            mode = 'quiz';
+            currentQuestion = 0;
+            answers = new Array(quizQuestions.length).fill(null);
+            showQuestion();
+        }
+
+        function startCases() {
+            mode = 'cases';
+            currentCase = 0;
+            caseAnswers = [];
+            showCaseQuestion();
+        }
+
+        function showGuide() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+            document.getElementById('guideSection').classList.remove('hidden');
+        }
+
+        function showQuestion() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('quizSection').classList.remove('hidden');
+            document.getElementById('guideSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+
+            const question = quizQuestions[currentQuestion];
+            const progress = ((currentQuestion + 1) / quizQuestions.length) * 100;
+
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('questionNumber').textContent = `Pregunta ${currentQuestion + 1} de ${quizQuestions.length}`;
+            document.getElementById('modeDisplay').textContent = 'Quiz - Preguntas de opción múltiple';
+            document.getElementById('questionText').textContent = question.question;
+            document.getElementById('nextBtn').disabled = true;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const label = document.createElement('label');
+                label.className = 'option';
+                label.innerHTML = `<input type="radio" name="answer" value="${index}"> ${option}`;
+                label.onclick = () => {
+                    answers[currentQuestion] = index;
+                    document.getElementById('nextBtn').disabled = false;
+                };
+                optionsContainer.appendChild(label);
+            });
+        }
+
+        function showCaseQuestion() {
+            document.getElementById('mainMenu').classList.add('hidden');
+            document.getElementById('quizSection').classList.remove('hidden');
+            document.getElementById('guideSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+
+            const caseData = clinicalCases[currentCase];
+            const questionIndex = caseAnswers.length;
+            const caseQuestion = caseData.questions[questionIndex];
+
+            document.getElementById('modeDisplay').textContent = `Caso Clínico ${currentCase + 1} de ${clinicalCases.length}`;
+
+            if (questionIndex === 0) {
+                document.getElementById('questionNumber').innerHTML = `<div class="case-scenario">${caseData.scenario}</div>`;
+            } else {
+                document.getElementById('questionNumber').innerHTML = '';
+            }
+
+            const progress = ((currentCase * 4 + questionIndex + 1) / (clinicalCases.length * 4)) * 100;
+            document.getElementById('progressFill').style.width = progress + '%';
+            document.getElementById('questionText').textContent = caseQuestion.text;
+            document.getElementById('nextBtn').disabled = true;
+
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            caseQuestion.options.forEach((option, index) => {
+                const label = document.createElement('label');
+                label.className = 'option';
+                label.innerHTML = `<input type="radio" name="answer" value="${index}"> ${option}`;
+                label.onclick = () => {
+                    document.getElementById('nextBtn').disabled = false;
+                    caseAnswers.push(index);
+                };
+                optionsContainer.appendChild(label);
+            });
+        }
+
+        function nextQuestion() {
+            if (mode === 'quiz') {
+                if (currentQuestion < quizQuestions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    showQuizResults();
+                }
+            } else if (mode === 'cases') {
+                const caseData = clinicalCases[currentCase];
+                if (caseAnswers.length < caseData.questions.length) {
+                    showCaseQuestion();
+                } else if (currentCase < clinicalCases.length - 1) {
+                    currentCase++;
+                    caseAnswers = [];
+                    showCaseQuestion();
+                } else {
+                    showCasesResults();
+                }
+            }
+        }
+
+        function skipQuestion() {
+            if (mode === 'quiz') {
+                answers[currentQuestion] = null;
+                if (currentQuestion < quizQuestions.length - 1) {
+                    currentQuestion++;
+                    showQuestion();
+                } else {
+                    showQuizResults();
+                }
+            }
+        }
+
+        function showQuizResults() {
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+
+            let correct = 0;
+            let incorrect = 0;
+            let skipped = 0;
+
+            quizQuestions.forEach((q, i) => {
+                if (answers[i] === null) skipped++;
+                else if (answers[i] === q.correct) correct++;
+                else incorrect++;
+            });
+
+            const percentage = Math.round((correct / quizQuestions.length) * 100);
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('skippedCount').textContent = skipped;
+
+            if (percentage >= 70) {
+                document.getElementById('resultTitle').textContent = '¡Excelente! 🎉';
+                document.getElementById('resultMessage').textContent = `Obtuviste ${percentage}% - ¡Estás bien preparado para el examen!`;
+            } else if (percentage >= 50) {
+                document.getElementById('resultTitle').textContent = '¡Bien! 👍';
+                document.getElementById('resultMessage').textContent = `Obtuviste ${percentage}% - Continúa estudiando las áreas débiles.`;
+            } else {
+                document.getElementById('resultTitle').textContent = 'Sigue estudiando 📚';
+                document.getElementById('resultMessage').textContent = `Obtuviste ${percentage}% - Revisa el material y vuelve a intentar.`;
+            }
+
+            const detailedResults = document.getElementById('detailedResults');
+            detailedResults.innerHTML = '<h3>Revisión de respuestas:</h3>';
+
+            quizQuestions.forEach((q, i) => {
+                const resultItem = document.createElement('div');
+                resultItem.className = 'result-item';
+
+                if (answers[i] === null) {
+                    resultItem.classList.add('incorrect');
+                    resultItem.innerHTML = `
+                        <div class="result-question">❓ Pregunta ${i + 1}: ${q.question}</div>
+                        <div class="result-answer"><strong>Saltada</strong></div>
+                        <div class="result-answer"><strong>Respuesta correcta:</strong> ${q.options[q.correct]}</div>
+                    `;
+                } else if (answers[i] === q.correct) {
+                    resultItem.classList.add('correct');
+                    resultItem.innerHTML = `
+                        <div class="result-question">✓ Pregunta ${i + 1}: ${q.question}</div>
+                        <div class="result-answer"><strong>Tu respuesta:</strong> ${q.options[answers[i]]}</div>
+                    `;
+                } else {
+                    resultItem.classList.add('incorrect');
+                    resultItem.innerHTML = `
+                        <div class="result-question">✗ Pregunta ${i + 1}: ${q.question}</div>
+                        <div class="result-answer"><strong>Tu respuesta:</strong> ${q.options[answers[i]]}</div>
+                        <div class="result-answer"><strong>Respuesta correcta:</strong> ${q.options[q.correct]}</div>
+                    `;
+                }
+                detailedResults.appendChild(resultItem);
+            });
+        }
+
+        function showCasesResults() {
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.remove('hidden');
+
+            let correct = 0;
+            let total = 0;
+
+            clinicalCases.forEach((caseItem, caseIdx) => {
+                caseItem.questions.forEach((q, qIdx) => {
+                    if (caseAnswers[caseIdx * 4 + qIdx] === q.correct) correct++;
+                    total++;
+                });
+            });
+
+            const percentage = Math.round((correct / total) * 100);
+            document.getElementById('scoreDisplay').textContent = percentage + '%';
+            document.getElementById('correctCount').textContent = correct;
+            document.getElementById('incorrectCount').textContent = total - correct;
+            document.getElementById('skippedCount').textContent = '0';
+
+            if (percentage >= 70) {
+                document.getElementById('resultTitle').textContent = '¡Razonamiento clínico excelente! 🎯';
+                document.getElementById('resultMessage').textContent = `Obtuviste ${percentage}% - ¡Aplicas bien la teoría!`;
+            } else {
+                document.getElementById('resultTitle').textContent = 'Continúa practicando 📚';
+                document.getElementById('resultMessage').textContent = `Obtuviste ${percentage}% - Repasa los casos clínicos.`;
+            }
+
+            const detailedResults = document.getElementById('detailedResults');
+            detailedResults.innerHTML = '<h3>Revisión de Casos Clínicos:</h3>';
+
+            clinicalCases.forEach((caseItem, caseIdx) => {
+                const caseSection = document.createElement('div');
+                caseSection.innerHTML = `<div style="font-weight: bold; margin-top: 15px; color: var(--color-primary);">Caso ${caseIdx + 1}:</div>`;
+                
+                caseItem.questions.forEach((q, qIdx) => {
+                    const answerIdx = caseIdx * 4 + qIdx;
+                    const resultItem = document.createElement('div');
+                    resultItem.className = 'result-item';
+
+                    if (caseAnswers[answerIdx] === q.correct) {
+                        resultItem.classList.add('correct');
+                        resultItem.innerHTML = `<div class="result-question">✓ Pregunta ${qIdx + 1}: ${q.text}</div>`;
+                    } else {
+                        resultItem.classList.add('incorrect');
+                        resultItem.innerHTML = `
+                            <div class="result-question">✗ Pregunta ${qIdx + 1}: ${q.text}</div>
+                            <div class="result-answer"><strong>Tu respuesta:</strong> ${caseAnswers[answerIdx] !== undefined ? q.options[caseAnswers[answerIdx]] : 'No respondida'}</div>
+                            <div class="result-answer"><strong>Respuesta correcta:</strong> ${q.options[q.correct]}</div>
+                        `;
+                    }
+                    caseSection.appendChild(resultItem);
+                });
+                detailedResults.appendChild(caseSection);
+            });
+        }
+
+        function backToMenu() {
+            currentQuestion = 0;
+            currentCase = 0;
+            mode = null;
+            answers = [];
+            caseAnswers = [];
+
+            document.getElementById('mainMenu').classList.remove('hidden');
+            document.getElementById('quizSection').classList.add('hidden');
+            document.getElementById('guideSection').classList.add('hidden');
+            document.getElementById('resultsSection').classList.add('hidden');
+        }
+    </script>
+</body>
+</html>
